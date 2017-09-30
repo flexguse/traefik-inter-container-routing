@@ -1,0 +1,27 @@
+version: "3"
+services:
+  traefik:
+    image: traefik
+    container_name: traefik
+    restart: always
+    command: --web --docker --logLevel=DEBUG
+    networks:
+      proxy:
+        aliases:
+          - web1.flex-guse.de
+          - web2.flex-guse.de
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+      - ./ssl:/ssl
+    labels:
+      - "traefik.port=8080"
+      - "traefik.docker.network=traefik_proxy"
+      - "traefik.frontend.rule=Host:traefik.flex-guse.de"
+
+networks:
+  proxy:
+    driver: bridge

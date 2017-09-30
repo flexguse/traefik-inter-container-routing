@@ -1,0 +1,17 @@
+version: "3"
+services:
+  web:
+    build:
+      context: "build"
+    container_name: web2
+    restart: always
+    networks:
+      traefik_proxy
+    labels:
+      - "traefik.docker.network=traefik_proxy"
+      - "traefik.frontend.rule=Host:web2.flex-guse.de"
+    volumes:
+      - ./html:/usr/share/nginx/html
+networks:
+  traefik_proxy:
+    external: true
